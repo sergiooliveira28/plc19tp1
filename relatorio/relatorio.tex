@@ -1,0 +1,200 @@
+\documentclass[11pt,a4paper]{report}
+\usepackage[a4paper,left=3cm,right=2cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue]{hyperref}
+\usepackage[T1]{fontenc} % to have good hyphenation
+\usepackage[utf8]{inputenc} % accented characters in input
+\usepackage[portuguese]{babel}
+\usepackage{color}
+\usepackage{adjustbox}
+\usepackage{listings}
+\lstset{language=C}
+\begin{document}
+\title{Trabalho de Sistemas Operativos\\Processamento de um notebook}
+\author{
+   Sérgio Oliveira~\\
+   \texttt{a62134}
+   \and
+   Pedro Dias~\\
+   \texttt{a63389}
+}
+\date{21 de Maio de 2018}
+\maketitle
+\raggedbottom
+\pagebreak
+\pagebreak
+
+% CAP 0 - - - - - - - -  - - - - 
+
+\tableofcontents
+\pagebreak
+\chapter{Introdução}
+\raggedbottom
+\pagebreak
+
+% CAP 1 - - - - - - - -  - - - - 
+
+\chapter{Execucão}
+\section{Noções básicas}
+
+A funcionalidade básica do nosso programa está em ler o nosso \textit{notebook} linha a linha e termina a sua execução até que o ficheiro passado como argumento tenha sido lido pelo \textit{while} até à linha final.
+
+Como podem existem caractéres especiais no início de cada linha de código de um ficheiro, primeiro temos que fazer o processamento da mesma, filtrando os conteúdos para as variáveis corretas.
+~\\
+
+Imaginemos este exemplo como \textit{stdin} retirado do enunciado:
+\begin{verbatim}
+Este comando lista os ficheiros:
+$ ls
+\end{verbatim}
+
+O programa irá fazer o \textit{parsing} das linhas e estas são processadas para que se reconheça o conjunto de caratéres especiais para o correto processamento do ficheiro, sendo eles:
+
+\begin{itemize}
+\item \$; 
+\item \$|;
+\item \$(número)|;
+\item \verb|>>>| e \verb|<<<|.
+\end{itemize}
+
+Uma linha delimitada por qualquer outra expressão diferente dos itens em cima irá ser ignorada e não interpretada como comando (mantida intacta no ficheiro original).
+
+Para cada caratér especial, temos então variáveis guardadas para podermos fazer comparações com o ficheiro \textit{notebook}. Neste caso, consideremos a variável '\$' (char * dollar).
+
+
+\lstinputlisting[breaklines=true, keywordstyle=\color{blue},frame=single,language=C, firstline=184, lastline=184]{notebook.c}
+
+Através do \textit{if} acima referido e:
+
+\lstinputlisting[breaklines=true, keywordstyle=\color{blue},frame=single,language=C, firstline=68, lastline=73]{notebook.c} ~\\
+
+através da função trim, podemos então ignorar o que não é necessário na nossa linha e executamos o comando 'ls' através da função 'execl'.
+
+
+\section{Ciclo principal}
+
+O cíclo while que está representado na função 'main' é o motor de todo o nosso programa, que está a ser controlado através de flags e da função read, que ao ser executada, retorna o valor de bytes que foram lidos. Se este valor retornado for negativo, então o \textit{system call} está a retornar um erro. 
+
+Esta é então a nossa maneira de parar o cíclo, executando-o até que o nosso read fique sem mais bytes para ler.
+~\\
+\lstinputlisting[breaklines=true, keywordstyle=\color{blue},frame=single,language=C, firstline=179, lastline=179]{notebook.c}
+~\\
+
+Portanto, se este cíclo terminar com as respectivas flags a retornarem sucesso na saída, o programa substitui o ficheiro processado pelo programa pelo ficheiro  \textit{notebook} original através da função 'rename' e remove então a pasta temporária já não necessária para o processamento (iremos falar mais tarde sobre a sua utilidade).
+
+Se o cíclo não retornar sucesso, a função 'rename' já não será executada para que o ficheiro \textit{notebook} original não seja alterado e remove tudo o que já não é necessário.
+
+
+\section{Re-processamento}
+
+A funcionalidade normal do nosso programa será sempre executar e inserir os nossos resultados entre \verb|>>>| e \verb|<<<|.
+Haverá no entanto alturas em que faremos alterações ao nosso sistema (criamos um ficheiro novo, o \textit{word count} de determinado ficheiro é agora maior, o estado de X dispositivo foi alterado, entre outros). 
+
+Nestes casos, necessitamos então de voltar a executar as linhas de comando do nosso \textit{notebook}.
+
+\lstinputlisting[breaklines=true, keywordstyle=\color{blue},frame=single,language=C, firstline=104, lastline=104]{notebook.c}
+
+~\\
+% FICHEIRO OU PIPE
+
+A função re-processamento abre então um ficheiro temporário para podermos fazer o \textit{parsing} do nosso ficheiro de entrada, fazendo com que o original não seja imediatamente alterado.
+
+\lstinputlisting[breaklines=true, keywordstyle=\color{blue},frame=single,language=C, firstline=111, lastline=112]{notebook.c}
+~\\
+
+Executamos então outro ciclo da mesma natureza do \textit{while} da função main, lendo linha a linha e, desta vez, ignorando todo o conteudo entre \verb|>>>| e \verb|<<<| do ficheiro de entrada.
+
+Após isto tudo, usámos a função rename para relocarmos o ficheiro temporário para o original.
+
+\lstinputlisting[breaklines=true, keywordstyle=\color{blue},frame=single,language=C, firstline=134, lastline=134]{notebook.c}
+
+\pagebreak
+\section{Detecção de erros / Interrupção}
+
+
+
+Uma das flags é usada para depuração de erros de qualquer fork criado. Se o fork retorna um \textit{status} diferente de sucesso, pode significar que a linha lida contém um comando errado.
+Neste caso, teriamos então de cancelar a execução do nosso \textit{notebook}.
+
+Para resolver isso, recorremos à função forkError,
+
+\lstinputlisting[breaklines=true, keywordstyle=\color{blue},frame=single,language=C, firstline=76, lastline=76]{notebook.c}
+
+que, ao longo de toda a nossa função main, determina o valor da variável local flagForkError. 
+~\\
+
+A função forkError faz o teste, através de estados de finalização de processos, para que possámos apanhar o estado correto de cada fork criado e sabermos então se podemos interromper o programa ou não.
+~\\
+
+No entanto também pode haver ação humana e, para isso, o sinal \textit{SIGINT} é enviado para o programa (sinal normalmente relacionado com a combinação de botões \textit{Control+C}).
+Nesse caso, a nossa variável global \textit{running} irá determinar o estado de execução do nosso programa.
+
+\lstinputlisting[breaklines=true, keywordstyle=\color{blue},frame=single,language=C, firstline=35, lastline=38]{notebook.c}
+~\\
+
+A detecção do sinal deve ser inicializada na main pela função de sistema \textit{signal}.
+\raggedbottom
+\pagebreak
+% CAP 2 - - - - - - - -  - - - - 
+
+\chapter{Outras Funcionalidades}
+\section{Histórico de comandos anteriores}
+
+Nesta secção, decidimos usar a biblioteca Regex.
+\lstinputlisting[breaklines=true, keywordstyle=\color{blue},frame=single,language=C, firstline=24, lastline=24]{notebook.c}
+
+A funcionalidade das expressões regulares para podermos comparar com o conjunto de caratéres especiais \verb|$n|| era o ideal para podermos continuar a desenvolver esta parte do trabalho.
+
+A partir daqui, houve duas ideias diferentes para o que haveriamos de fazer. Uma das ideias seria a criação de um ficheiro num formato básico de texto chamado \textit{history}, em que ao longo da leitura das linhas com comandos do nosso \textit{notebook}, o programa copiava o comando e colava como uma nova linha no nosso histórico de comanados. 
+
+Quando o programa reconhecesse o conjunto de caratéres especiais \verb|$n||, guardávamos 'n' numa variável como o número do comando da lista de comandos anteriores no \textit{notebook}. 'n' seria então o número da linha existente no nosso ficheiro \textit{history} para quando quiséssemos que fosse executada.
+~\\
+
+Em vez desse procedimento, optamos por outra solução.
+
+Dada uma linha de comando executada pelo programa, é então criado um ficheiro (de seu nome resultN.txt) para que o output desse mesmo comando fosse armazenado.
+
+a variável N no nome do ficheiro é uma variável (int), significando então o número da linha que foi executada.
+
+Através de funções da biblioteca \textit{string.h}, conseguimos converter a variável N para que possámos escrever e ler corretamente os ficheiros resultN.
+~\\
+\lstinputlisting[breaklines=true, keywordstyle=\color{blue},frame=single,language=C, firstline=41, lastline=49]{notebook.c}
+
+\lstinputlisting[breaklines=true, keywordstyle=\color{blue},frame=single,language=C, firstline=190, lastline=190]{notebook.c} ~\\
+
+Em resumo, temos então a mesma quantidade de linhas de comando executadas e ficheiros resultN, para o output ser usado de várias maneiras possíveis, como veremos na secção seguinte. 
+\pagebreak
+\section{Execução de conjuntos de comandos}
+
+Resta-nos então falar de um conjunto de caratéres especiais referido anteriormente. A expressão \verb|$|| remete-nos para uma execução em pipe e está guardada numa variável local no nosso programa (char * dollarPipe) para que possámos mais uma vez fazer as comparações corretamente.
+~\\
+\lstinputlisting[breaklines=true, keywordstyle=\color{blue},frame=single,language=C, firstline=228, lastline=228]{notebook.c} 
+
+Mais uma vez através da função trim, "cortamos" o que não é necessário na nossa linha para executar o comando.
+\lstinputlisting[breaklines=true, keywordstyle=\color{blue},frame=single,language=C, firstline=68, lastline=73]{notebook.c} ~\\
+
+No entanto, desta vez, precisamos do comando anterior a este, visto que é uma execução em pipeline.
+
+Usando o método da secção anterior, como estamos então a guardar o output dos comandos que executamos anteriormente, conseguimos ler o output do comando anterior.
+
+Para isso decrementamos a variável N para podermos aceder ao ficheiro resultN correto do comando anterior.
+\lstinputlisting[breaklines=true, keywordstyle=\color{blue},frame=single,language=C, firstline=240, lastline=240]{notebook.c} 
+~\\
+
+A partir daí, com a system call fork(), o processo pai e o processo filho fazem então a execução em pipeline.
+
+
+
+% CAP 3 - - - - - - - -  - - - - 
+
+
+\chapter{Conclusão}
+
+Após várias semanas de desenvolvimento, há que realçar alguns pontos importantes, como a certa dificuldade em utilizar funções de baixo nível (implementação de pipes com nome, correta comunicação entre forks, entre outros). 
+
+No entanto, houve sempre boas ideias vários e boa comunicação, e após correcções e vários testes ao nosso trabalho, estamos satisfeitos por ter ultrapassado esses entraves e ter concluído o projeto.
+
+Ficamos a compreender mais sobre as system calls de baixo nível e em que contexto usá-las, para termos um maior controlo de processos e ficheiros. 
+
+Com o desenvolvimento destes projetos, haverá também sempre a expansão do nosso conhecimento e interesse em sistemas UNIX e UNIX-like.
+
+\end{document}

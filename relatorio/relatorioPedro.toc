@@ -1,0 +1,11 @@
+\babel@toc {portuguese}{}
+\contentsline {chapter}{\numberline {1}Introdu\IeC {\c c}\IeC {\~a}o}{2}{chapter.1}
+\contentsline {chapter}{\numberline {2}Desenvolvimento}{3}{chapter.2}
+\contentsline {section}{\numberline {2.1}Funcionalidades b\IeC {\'a}sicas}{3}{section.2.1}
+\contentsline {subsection}{\numberline {2.1.1}Execu\IeC {\c c}\IeC {\~a}o de programas}{3}{subsection.2.1.1}
+\contentsline {section}{\numberline {2.2}Re-processamento de um notebook}{3}{section.2.2}
+\contentsline {section}{\numberline {2.3}Detec\IeC {\c c}\IeC {\~a}o de erros e interrup\IeC {\c c}\IeC {\~a}o da execu\IeC {\c c}\IeC {\~a}o}{3}{section.2.3}
+\contentsline {chapter}{\numberline {3}Funcionalidades avan\IeC {\c c}adas}{4}{chapter.3}
+\contentsline {section}{\numberline {3.1}Acesso a resultados de comandos anteriores arbitr\IeC {\'a}rios}{4}{section.3.1}
+\contentsline {section}{\numberline {3.2}Execu\IeC {\c c}\IeC {\~a}o de conjuntos de comandos}{4}{section.3.2}
+\contentsline {chapter}{\numberline {4}Conclus\IeC {\~a}o}{5}{chapter.4}

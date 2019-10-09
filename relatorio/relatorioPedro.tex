@@ -1,0 +1,115 @@
+\documentclass[11pt,a4paper]{report}
+\usepackage[a4paper,left=3cm,right=2cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue]{hyperref}
+\usepackage[T1]{fontenc} % to have good hyphenation
+\usepackage[utf8x]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage[combine]{ucs}
+\usepackage{color}
+\usepackage{adjustbox}
+\usepackage{listings}
+
+\lstset{language=C}
+\begin{document}
+\title{Trabalho de Sistemas Operativos\\Processamento de um notebook}
+\author{
+   Sérgio Oliveira~\\
+   \texttt{a62134}
+   \and
+   Pedro Dias~\\
+   \texttt{a63389}
+}
+\date{21 de Maio de 2018}
+\maketitle
+\raggedbottom
+\pagebreak
+\pagebreak
+
+% CAP 0 - - - - - - - -  - - - - 
+
+\tableofcontents
+\pagebreak
+\chapter{Introdução}
+
+Este relatório tem como objetivo demonstrar o desenvolvimento de um programa que faz o processamento de ficheiros no formato designado pelo trabalho prático.
+
+Um ficheiro de formato notebook tem a extensão '.nb'. Este pode conter linhas de código para serem interpretadas pela shell do sistema, resultados de execução das respetivas linhas de código bem como outro tipo de conteúdo tal como documentação relevante.
+
+Relacionado com os temas mencionados, serão apresentados ao longo do relatório fragmentos de código para que haja uma melhor compreensão do assunto em questão.
+
+O relatório encontra-se dividido em várias secções que correspondem aos pontos do enunciado do trabalho.
+\raggedbottom
+\pagebreak
+
+% CAP 1 - - - - - - - -  - - - - 
+
+\chapter{Desenvolvimento}
+\section{Funcionalidades básicas}
+\subsection{Execução de programas}
+Neste ponto, o programa deve interpretar as linhas começadas por \$ como comandos (programa e argumentos), e se começadas por \$| o comando deve ter como stdin o resultado do comando anterior. O resultado produzido é então colocado no ficheiro de input e delimitado por \verb|“>>>”| e \verb|“<<<”|.
+O exemplo escolhido foi o fornecido no enunciado do trabalho.
+
+%\includegraphics[scale=0.5]{}]
+
+Para a leitura do ficheiro comandos .nb e de todos os ficheiros passados como argumento, foi utilizado um ciclo \textit{while} que faz a leitura linha a linha até ao fim do ficheiro.
+A cada iteração do ciclo, é enviado para o ficheiro “out.txt” (previamente criado) a linha lida até encontrar o primeiro sinal de \$. Após encontrar este primeiro comando, é feito o parsing dessa linha para separar o sinal de \$ e o comando. Para isto é utilizado a função auxiliar “trim”.
+
+%\includegraphics[scale=0.5]{}]
+
+Posteriormente é criado um novo ficheiro, “result1.txt” (colocado no diretório “tmp” criado no início do programa), que é utilizado como stdout da execução da system call “execl”.
+É criado um fork para a execução do “execl” anteriormente descrito e é feita a espera do processo “filho” pelo processo “pai” para que depois seja transferido todo o conteúdo do ficheiro “result1.txt” delimitado por \verb|“>>>”| e \verb|“<<<”|  para o ficheiro “out.txt”.
+
+%\includegraphics[scale=0.5]{}]
+
+A lógica de execução dos comandos seguidos por \$| é a mesma seguida por \$ mas com a diferença que esta execução tem como stdin o resultado anterior, ou seja, neste caso a execução do comando “sort” vai ter como stdin o ficheiro “result1.txt” e como stdout o ficheiro “result2.txt”.
+
+%\includegraphics[scale=0.5]{}]
+
+
+\section{Re-processamento de um notebook}
+
+O re-processamento de um notebook é processado através da função auxiliar “re_processamento”. Esta função tem como objetivo criar um novo ficheiro com o nome de “REDO.txt” e colocar no mesmo todas as linhas do ficheiro de input que não estejam entre \verb|“>>>”| e \verb|“<<<”| (sinais incluídos), para posteriormente o ciclo while descrito em 1.1 fazer o processamento dos comandos editados pelo utilizador.
+
+%\includegraphics[scale=0.5]{}]
+
+
+\section{Detecção de erros e interrupção da execução}
+
+A deteção de erros é verificada a cada execução de comandos. Após a criação do fork o processo pai fica à espera do processo filho e, se neste ocorrer algum erro na execução do comando, é executada a linha de código “exit(-1)” e o processo pai apanha o sinal de erro, terminando o processamento do ficheiro de input.
+
+%\includegraphics[scale=0.5]{}]
+%\includegraphics[scale=0.5]{}]
+
+A detecção da interrupção da execução (sinal normalmente relacionado com a combinação de botões Control+C) é feita através do envio do sinal SIGINT para o programa. Nesse caso, a variável global running irá determinar o estado de execução do nosso programa. 
+Na início da função “main” do programa é colocado a linha “signal(SIGINT, handler);“ que detecta o sinal SIGINT e invoca a função “handler” que altera o estado da variável “running” e termina o programa sem alterar o estado do ficheiro de input.
+
+
+\chapter{Funcionalidades avançadas}
+\section{Acesso a resultados de comandos anteriores arbitrários}
+
+O execução dos comandos seguidos por “\$N|” contém a mesma lógica de execução dos sinais \$ e \$| com a particularidade de que o stdin do novo comando vai ser o ficheiro “resultN.txt” em que N é o número entre “\$” e “|” .
+Para reconhecer o sinal “\$N|” utiliza-se a expressão regular “ \$[1-9][0-9]*| “ e a biblioteca “regex.h” para se fazer o parsing da linha.
+
+%\includegraphics[scale=0.5]{}]
+
+%\includegraphics[scale=0.5]{}]
+
+\section{Execução de conjuntos de comandos}
+A execução de conjuntos de programas foi testado com o exemplo abaixo e o “execl” utilizado no programa executa o comando com pipes como pretendido.
+
+%\includegraphics[scale=0.5]{}]
+
+
+% CAP 3 - - - - - - - -  - - - - 
+
+
+\chapter{Conclusão}
+
+Após 2 semanas de desenvolvimento, há que realçar alguns pontos importantes, como a dificuldade de implementar funções de baixo nível (implementação de pipes com nome, correta comunicação entre forks, entre outros) seguindo assim outra direcção para a realização do trabalho pratico.            
+
+A utilização de ficheiros temporários como stdin e stdout foi discutida por nós e vista como a solução para completar todos os pontos colocados no enunciado do trabalho.
+
+A única excepção foi no ponto 2.2 , em que o grupo decidiu não avançar para a execução em background dos ficheiros.                
+O grupo de trabalho sentiu dificuldades em conciliar a realização deste projecto com os outros projectos do curso e ainda com o trabalho de dia de cada um , mas mesmo com estes obstaculos ficamos a compreender mais sobre as system calls de baixo nível e em que contexto usá-las, para termos um maior controlo de processos e ficheiros. 
+Com o desenvolvimento destes projetos, haverá também sempre a expansão do nosso conhecimento e interesse em sistemas UNIX e UNIX-like.
+\end{document}
