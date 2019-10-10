@@ -26,6 +26,8 @@
 \pagebreak
 \chapter{Introdução}
 
+O programa escrito em formato Lex irá fazer o parsing das linhas do ficheiro passado para input, filtrando os conteúdos para as variáveis corretas.
+
 \raggedbottom
 \pagebreak
 
@@ -36,11 +38,11 @@
 
 A funcionalidade básica deste trabalho está em identificar padrões da linguagem \textit{Enamex} para processar palavras-chave, assim como nomes completos de pessoas, locais e cidades.
 
-Depois de processado, é então gerada uma página HTML com toda a informação extraída do exemplo Enamex, filtrando a informação que nos é pedida.
+Depois de processado, é então gerada uma página HTML com toda a informação extraída do exemplo \textit{Enamex}, filtrando a informação que nos é pedida.
 ~\\
-Como no exemplo em anexo junto com o trabalho prático, existem diversos caractéres especiais vindos do tipo de linguagem XML, portanto primeiro temos de fazer o processamento dos mesmos.
+Como no exemplo em anexo junto com o trabalho prático, existem diversos caractéres especiais vindos do tipo de linguagem \textit{XML}, portanto primeiro temos de fazer o processamento dos mesmos.
 
-O programa escrito em formato Lex irá fazer o parsing das linhas do ficheiro passado para input, filtrando os conteúdos para as variáveis corretas.
+
 
 \pagebreak
 \section{Países e cidades}
@@ -64,10 +66,10 @@ O programa escrito em formato Lex irá fazer o parsing das linhas do ficheiro pa
 
 \chapter{Conclusão}
 
-Após dias de desenvolvimento, há que realçar as principais dificuldades. O facto de não poder usar os conjuntos de letras, dígitos e caractéres especiais (nomeadamente \d, \s e \w), devido a prováveis limitações de libraries e visto que dava problemas na compilação em FLex e gcc, foi posta de parte a introdução desses caracteres.
+Após dias de desenvolvimento, há que realçar as principais dificuldades. O facto de não poder usar os conjuntos de letras, dígitos e caractéres especiais (nomeadamente \textbackslash d, \textbackslash s e \textbackslash w), devido a prováveis limitações de libraries e visto que dava problemas na compilação em FLex e gcc, foi posta de parte a introdução desses caracteres.
 
 Após várias correcções e testes ao trabalho, corrigiu-se esse precalço.
 
-Com o desenvolvimento destes projetos, haverá também sempre a expansão do nosso conhecimento e interesse em sistemas UNIX e UNIX-like.
+Com o desenvolvimento destes projetos, haverá também sempre a expansão do nosso conhecimento e interesse em sistemas UNIX e UNIX-like, assim como em Expressões Regulares.
 
 \end{document}
