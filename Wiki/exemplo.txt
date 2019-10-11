@@ -1,14 +1,29 @@
 ;ExemploHTML;
-
-:Este e um /exemplo/ de 'HTML'
+Este e um exemplo de HTML.
 No linebreak here.
-
-
-== exemplo de h2 ==
-
-----
+_exemplo de underline_
+-+
+Linebreak
+/exemplo de italico/
+'Exemplo de negrito'
+::Indentacao
+::::Indentacao
+-+
+'Lista normal'
 =>
 * Item 1 *
 * Item 2 *
 * Item 3 *
+<=
+'Lista com numeros'
+=>
+# Item 1 #
+# Item 2 #
+# Item 3 #
+<=
+'Outra lista com numeros'
+=>
+# Item 1 #
+# Item 2 #
+# Item 3 #
 <=

@@ -352,8 +352,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 11
-#define YY_END_OF_BUFFER 12
+#define YY_NUM_RULES 13
+#define YY_END_OF_BUFFER 14
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -361,11 +361,12 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static const flex_int16_t yy_accept[31] =
+static const flex_int16_t yy_accept[41] =
     {   0,
-        0,    0,   12,   10,   11,   10,   10,    5,   10,    4,
-       10,   10,   10,    0,    0,    0,    0,    0,    8,    0,
-        0,    7,    2,    0,    9,    3,    1,    0,    6,    0
+        0,    0,   14,   12,    5,   12,   12,   12,    7,   12,
+        6,   12,   12,   12,   12,    0,    0,    0,    0,    0,
+        0,    0,    0,    0,    9,    8,    0,    0,    0,   11,
+        0,    2,    0,   10,    0,    3,    1,    0,    4,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -373,17 +374,17 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    1,    2,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    3,    1,    1,    1,    1,    1,    1,    4,    1,
-        1,    5,    1,    1,    6,    1,    7,    8,    8,    8,
-        8,    8,    8,    8,    8,    8,    8,    9,   10,   11,
-       12,   13,    1,    1,    8,    8,    8,    8,    8,    8,
-        8,    8,    8,    8,    8,    8,    8,    8,    8,    8,
-        8,    8,    8,    8,    8,    8,    8,    8,    8,    8,
-        1,    1,    1,    1,    1,    1,    8,    8,    8,    8,
+        1,    3,    1,    1,    4,    1,    1,    1,    5,    1,
+        1,    6,    7,    1,    7,    1,    8,    9,    9,    9,
+        9,    9,    9,    9,    9,    9,    9,   10,   11,   12,
+       13,   14,    1,    1,    9,    9,    9,    9,    9,    9,
+        9,    9,    9,    9,    9,    9,    9,    9,    9,    9,
+        9,    9,    9,    9,    9,    9,    9,    9,    9,    9,
+        1,    1,    1,    1,   15,    1,    9,    9,    9,    9,
 
-        8,    8,    8,    8,    8,    8,    8,    8,    8,    8,
-        8,    8,    8,    8,    8,    8,    8,    8,    8,    8,
-        8,    8,    1,    1,    1,    1,    1,    1,    1,    1,
+        9,    9,    9,    9,    9,    9,    9,    9,    9,    9,
+        9,    9,    9,    9,    9,    9,    9,    9,    9,    9,
+        9,    9,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -400,46 +401,52 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static const YY_CHAR yy_meta[14] =
+static const YY_CHAR yy_meta[16] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1
+        1,    1,    1,    1,    1
     } ;
 
-static const flex_int16_t yy_base[31] =
+static const flex_int16_t yy_base[41] =
     {   0,
-        0,    0,   26,   57,   57,   16,   11,   57,   15,   57,
-       14,    9,   17,   27,   10,   33,   35,   36,   57,    9,
-       44,   57,   57,   13,   57,   57,   57,    3,   57,   57
+        0,    0,   51,   68,   68,   13,   14,   15,   68,   16,
+       68,   41,   36,   32,   17,   36,   24,   34,   31,   33,
+       38,   30,   45,   20,   68,   68,   29,   52,   34,   68,
+       32,   68,   29,   68,   27,   68,   68,   18,   68,   68
     } ;
 
-static const flex_int16_t yy_def[31] =
+static const flex_int16_t yy_def[41] =
     {   0,
-       30,    1,   30,   30,   30,   30,   30,   30,   30,   30,
-       30,   30,   30,   30,   30,   30,   30,   30,   30,   30,
-       30,   30,   30,   16,   30,   30,   30,   30,   30,    0
+       40,    1,   40,   40,   40,   40,   40,   40,   40,   40,
+       40,   40,   40,   40,   40,   40,   40,   40,   40,   40,
+       40,   40,   40,   40,   40,   40,   40,   40,   17,   40,
+       19,   40,   21,   40,   23,   40,   40,   28,   40,    0
     } ;
 
-static const flex_int16_t yy_nxt[71] =
+static const flex_int16_t yy_nxt[84] =
     {   0,
-        4,    5,    4,    6,    7,    8,    9,    4,   10,   11,
-       12,   13,    4,   15,   29,   15,   21,   16,   16,   20,
-       19,   18,   17,   14,   21,   30,   30,   30,   30,   22,
-       23,   30,   30,   30,   14,   24,   30,   25,   30,   30,
-       16,   26,   17,   18,   30,   27,   28,   30,   30,   30,
-       30,   21,   30,   30,   30,   29,    3,   30,   30,   30,
-       30,   30,   30,   30,   30,   30,   30,   30,   30,   30
+        4,    5,    4,    6,    7,    8,    9,   10,    4,   11,
+       12,   13,   14,    4,   15,   16,   18,   20,   22,   27,
+       27,   17,   19,   21,   23,   28,   29,   30,   24,   22,
+       37,   20,   17,   31,   18,   32,   16,   28,   23,   19,
+       33,   21,   19,   34,   17,   26,   21,   35,   25,   24,
+       40,   40,   36,   23,   38,   40,   40,   40,   40,   40,
+       28,   40,   40,   40,   40,   40,   39,    3,   40,   40,
+       40,   40,   40,   40,   40,   40,   40,   40,   40,   40,
+       40,   40,   40
     } ;
 
-static const flex_int16_t yy_chk[71] =
+static const flex_int16_t yy_chk[84] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    7,   28,   24,   20,   15,    7,   13,
-       12,   11,    9,    6,   13,    3,    0,    0,    0,   13,
-       14,    0,    0,    0,   14,   16,    0,   16,    0,    0,
-       16,   17,   17,   18,    0,   18,   21,    0,    0,    0,
-        0,   21,    0,    0,    0,   21,   30,   30,   30,   30,
-       30,   30,   30,   30,   30,   30,   30,   30,   30,   30
+        1,    1,    1,    1,    1,    6,    7,    8,   10,   15,
+       38,    6,    7,    8,   10,   15,   17,   17,   24,   35,
+       24,   33,   17,   19,   31,   19,   29,   27,   22,   19,
+       21,   20,   18,   21,   16,   14,   21,   23,   13,   12,
+        3,    0,   23,   23,   28,    0,    0,    0,    0,    0,
+       28,    0,    0,    0,    0,    0,   28,   40,   40,   40,
+       40,   40,   40,   40,   40,   40,   40,   40,   40,   40,
+       40,   40,   40
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -462,6 +469,8 @@ char *yytext;
     #include <stdio.h>
     #include <stdlib.h>
     #include <string.h>
+    
+    int numerlist = 1;
     
     void inicializarHTML (){
         FILE *f;
@@ -497,14 +506,14 @@ char *yytext;
         FILE *f;
         f = fopen("wikipage.html","a");
         if (f==NULL) exit(EXIT_FAILURE);
-        fputs("    ",f);
+        fputs("&nbsp;&nbsp;&nbsp;&nbsp;",f);
         fclose(f);
     }
      void addP (){
         FILE *f;
         f = fopen("wikipage.html","a");
         if (f==NULL) exit(EXIT_FAILURE);
-        fputs("<br><br>",f);
+        fputs("<br><br><br>",f);
         fclose(f);
     }
     void addBold (char * text){
@@ -525,6 +534,15 @@ char *yytext;
         fputs("</i>",f);
         fclose(f);
     }
+    void addSubl (char * text){
+        FILE *f;
+        f = fopen("wikipage.html","a");
+        if (f==NULL) exit(EXIT_FAILURE);
+        fputs("<u>",f);
+        fputs(text,f);
+        fputs("</u>",f);
+        fclose(f);
+    }
     void beginulist (){
         FILE *f;
         f = fopen("wikipage.html","a");
@@ -538,6 +556,7 @@ char *yytext;
         if (f==NULL) exit(EXIT_FAILURE);
         fputs("\n</ul>\n",f);
         fclose(f);
+        numerlist=1;
     }
     void addul (char * text){
         FILE *f;
@@ -548,64 +567,28 @@ char *yytext;
         fputs("</li>\n",f);
         fclose(f);
     }
-    
-    void addh1(char * text){
+    void addnl (char * text){
         FILE *f;
         f = fopen("wikipage.html","a");
         if (f==NULL) exit(EXIT_FAILURE);
-        fputs("\n<h1>",f);
+        fputs("<li>",f);
+        fprintf(f,"%d",numerlist);
+        fputs(". ",f);
         fputs(text,f);
-        fputs("</h1>\n",f);
+        fputs("</li>\n",f);
         fclose(f);
+        numerlist++;
     }
-    void addh2(char * text){
+    void linebreak (){
         FILE *f;
         f = fopen("wikipage.html","a");
         if (f==NULL) exit(EXIT_FAILURE);
-        fputs("\n<h2>",f);
-        fputs(text,f);
-        fputs("</h2>\n",f);
-        fclose(f);
-    }
-    void addh3(char * text){
-        FILE *f;
-        f = fopen("wikipage.html","a");
-        if (f==NULL) exit(EXIT_FAILURE);
-        fputs("\n<h3>",f);
-        fputs(text,f);
-        fputs("</h3>\n",f);
-        fclose(f);
-    }
-    void addh4(char * text){
-        FILE *f;
-        f = fopen("wikipage.html","a");
-        if (f==NULL) exit(EXIT_FAILURE);
-        fputs("\n<h4>",f);
-        fputs(text,f);
-        fputs("</h4>\n",f);
-        fclose(f);
-    }
-    void addh5(char * text){
-        FILE *f;
-        f = fopen("wikipage.html","a");
-        if (f==NULL) exit(EXIT_FAILURE);
-        fputs("\n<h5>",f);
-        fputs(text,f);
-        fputs("</h5>\n",f);
-        fclose(f);
-    }
-    void addh6(char * text){
-        FILE *f;
-        f = fopen("wikipage.html","a");
-        if (f==NULL) exit(EXIT_FAILURE);
-        fputs("\n<h6>",f);
-        fputs(text,f);
-        fputs("</h6>\n",f);
+        fputs("<br>",f);
         fclose(f);
     }
 
-#line 608 "Wiki.c"
-#line 609 "Wiki.c"
+#line 591 "Wiki.c"
+#line 592 "Wiki.c"
 
 #define INITIAL 0
 
@@ -822,10 +805,10 @@ YY_DECL
 		}
 
 	{
-#line 165 "Wiki.l"
+#line 137 "Wiki.l"
 
 
-#line 829 "Wiki.c"
+#line 812 "Wiki.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -852,13 +835,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 31 )
+				if ( yy_current_state >= 41 )
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 57 );
+		while ( yy_base[yy_current_state] != 68 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -884,60 +867,71 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 167 "Wiki.l"
+#line 139 "Wiki.l"
 {yytext[yyleng-1]='\0'; addTitle(&yytext[1]);}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 168 "Wiki.l"
+#line 140 "Wiki.l"
 {yytext[yyleng-1]='\0'; addBold(&yytext[1]);}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 169 "Wiki.l"
+#line 141 "Wiki.l"
 {yytext[yyleng-1]='\0'; addItalic(&yytext[1]);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 170 "Wiki.l"
-{addSpace();}
+#line 142 "Wiki.l"
+{yytext[yyleng-1]='\0'; addSubl(&yytext[1]);}
 	YY_BREAK
 case 5:
+/* rule 5 can match eol */
 YY_RULE_SETUP
-#line 171 "Wiki.l"
-{addP();}
+#line 143 "Wiki.l"
+{linebreak();}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 172 "Wiki.l"
-{yytext[yyleng-1]='\0'; addh1(&yytext[1]);}
+#line 144 "Wiki.l"
+{addSpace();}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 173 "Wiki.l"
-{beginulist();}
+#line 145 "Wiki.l"
+{addP();}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 174 "Wiki.l"
-{endulist();}
+#line 146 "Wiki.l"
+{beginulist();}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 175 "Wiki.l"
-{yytext[yyleng-1]='\0'; addul(&yytext[1]);}
+#line 147 "Wiki.l"
+{endulist();}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 176 "Wiki.l"
-{addText(&yytext[0]);}
+#line 148 "Wiki.l"
+{yytext[yyleng-1]='\0'; addul(&yytext[1]);}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 177 "Wiki.l"
+#line 149 "Wiki.l"
+{yytext[yyleng-1]='\0'; addnl(&yytext[1]);}
+	YY_BREAK
+case 12:
+YY_RULE_SETUP
+#line 150 "Wiki.l"
+{addText(&yytext[0]);}
+	YY_BREAK
+case 13:
+YY_RULE_SETUP
+#line 151 "Wiki.l"
 ECHO;
 	YY_BREAK
-#line 941 "Wiki.c"
+#line 935 "Wiki.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1234,7 +1228,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 31 )
+			if ( yy_current_state >= 41 )
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1262,11 +1256,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 31 )
+		if ( yy_current_state >= 41 )
 			yy_c = yy_meta[yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-	yy_is_jam = (yy_current_state == 30);
+	yy_is_jam = (yy_current_state == 40);
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1942,7 +1936,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 177 "Wiki.l"
+#line 151 "Wiki.l"
 
 
 int yywrap(void) {return 1;}

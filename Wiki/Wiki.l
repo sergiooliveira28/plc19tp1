@@ -4,6 +4,8 @@
     #include <stdlib.h>
     #include <string.h>
     
+    int numerlist = 1;
+    
     void inicializarHTML (){
         FILE *f;
         f = fopen("wikipage.html","w");
@@ -38,14 +40,14 @@
         FILE *f;
         f = fopen("wikipage.html","a");
         if (f==NULL) exit(EXIT_FAILURE);
-        fputs("    ",f);
+        fputs("&nbsp;&nbsp;&nbsp;&nbsp;",f);
         fclose(f);
     }
      void addP (){
         FILE *f;
         f = fopen("wikipage.html","a");
         if (f==NULL) exit(EXIT_FAILURE);
-        fputs("<br><br>",f);
+        fputs("<br><br><br>",f);
         fclose(f);
     }
     void addBold (char * text){
@@ -66,6 +68,15 @@
         fputs("</i>",f);
         fclose(f);
     }
+    void addSubl (char * text){
+        FILE *f;
+        f = fopen("wikipage.html","a");
+        if (f==NULL) exit(EXIT_FAILURE);
+        fputs("<u>",f);
+        fputs(text,f);
+        fputs("</u>",f);
+        fclose(f);
+    }
     void beginulist (){
         FILE *f;
         f = fopen("wikipage.html","a");
@@ -79,6 +90,7 @@
         if (f==NULL) exit(EXIT_FAILURE);
         fputs("\n</ul>\n",f);
         fclose(f);
+        numerlist=1;
     }
     void addul (char * text){
         FILE *f;
@@ -89,59 +101,23 @@
         fputs("</li>\n",f);
         fclose(f);
     }
-    
-    void addh1(char * text){
+    void addnl (char * text){
         FILE *f;
         f = fopen("wikipage.html","a");
         if (f==NULL) exit(EXIT_FAILURE);
-        fputs("\n<h1>",f);
+        fputs("<li>",f);
+        fprintf(f,"%d",numerlist);
+        fputs(". ",f);
         fputs(text,f);
-        fputs("</h1>\n",f);
+        fputs("</li>\n",f);
         fclose(f);
+        numerlist++;
     }
-    void addh2(char * text){
+    void linebreak (){
         FILE *f;
         f = fopen("wikipage.html","a");
         if (f==NULL) exit(EXIT_FAILURE);
-        fputs("\n<h2>",f);
-        fputs(text,f);
-        fputs("</h2>\n",f);
-        fclose(f);
-    }
-    void addh3(char * text){
-        FILE *f;
-        f = fopen("wikipage.html","a");
-        if (f==NULL) exit(EXIT_FAILURE);
-        fputs("\n<h3>",f);
-        fputs(text,f);
-        fputs("</h3>\n",f);
-        fclose(f);
-    }
-    void addh4(char * text){
-        FILE *f;
-        f = fopen("wikipage.html","a");
-        if (f==NULL) exit(EXIT_FAILURE);
-        fputs("\n<h4>",f);
-        fputs(text,f);
-        fputs("</h4>\n",f);
-        fclose(f);
-    }
-    void addh5(char * text){
-        FILE *f;
-        f = fopen("wikipage.html","a");
-        if (f==NULL) exit(EXIT_FAILURE);
-        fputs("\n<h5>",f);
-        fputs(text,f);
-        fputs("</h5>\n",f);
-        fclose(f);
-    }
-    void addh6(char * text){
-        FILE *f;
-        f = fopen("wikipage.html","a");
-        if (f==NULL) exit(EXIT_FAILURE);
-        fputs("\n<h6>",f);
-        fputs(text,f);
-        fputs("</h6>\n",f);
+        fputs("<br>",f);
         fclose(f);
     }
 
@@ -149,30 +125,28 @@
 
 TITLE           [;][a-zA-Z0-9]+[;]
 INDENT          [:]
-BOLD            ['][a-zA-Z0-9]+[']
-ITALIC          [/][a-zA-Z0-9]+[/]
-H1              [=][ ]?[a-zA-Z0-9]+[ ]?[=]
-H2              (==)[ ]?[a-zA-Z0-9]+[ ]?(==)
-H3              [===][ ]?[a-zA-Z0-9]+[ ]?[===]
-H4              [====][ ]?[a-zA-Z0-9]+[ ]?[====]
-H5              [=====][ ]?[a-zA-Z0-9]+[ ]?[=====]
-H6              [======][ ]?[a-zA-Z0-9]+[ ]?[======]
-PARAGRAPH       [\-\-\-\-]
-LINEBREAK       [\n\n]
+BOLD            [']([ ]?[a-zA-Z0-9]+[ ]?)+[']
+ITALIC          [/]([ ]?[a-zA-Z0-9]+[ ]?)+[/]
+SUBL            [_]([ ]?[a-zA-Z0-9]+[ ]?)+[_]
+PARAGRAPH       [\-\+]
+LINEBREAK       [\n]
 BEGINULST       (\=>)
 ENDULIST        (<\=)
 UNORDLIST       [\*]([ ]?[a-zA-Z0-9]+[ ]?)+[\*]
+NUMERLIST       [\#]([ ]?[a-zA-Z0-9]+[ ]?)+[\#]
 %%
 
 {TITLE}      {yytext[yyleng-1]='\0'; addTitle(&yytext[1]);}
 {BOLD}       {yytext[yyleng-1]='\0'; addBold(&yytext[1]);}
 {ITALIC}     {yytext[yyleng-1]='\0'; addItalic(&yytext[1]);}
+{SUBL}       {yytext[yyleng-1]='\0'; addSubl(&yytext[1]);}
+{LINEBREAK}  {linebreak();}
 {INDENT}     {addSpace();}
 {PARAGRAPH}  {addP();}
-{H1}         {yytext[yyleng-1]='\0'; addh1(&yytext[1]);}
 {BEGINULST}  {beginulist();}
 {ENDULIST}   {endulist();}
 {UNORDLIST}  {yytext[yyleng-1]='\0'; addul(&yytext[1]);}
+{NUMERLIST}  {yytext[yyleng-1]='\0'; addnl(&yytext[1]);}
 .            {addText(&yytext[0]);}
 %%
 
