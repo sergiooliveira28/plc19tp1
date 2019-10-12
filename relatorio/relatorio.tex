@@ -28,7 +28,9 @@
 
 Este relatório tem como objetivo mostrar o desenvolvimento de um programa escrito em formato Lex, que faz o processamento de linhas de um ficheiro passado para input, filtrando os conteúdos para as variáveis corretas.
 \\
-Dos exemplos juntos em anexo com o enunciado do trabalho prático, fazemos uso do ficheiro em formato \textit{XML} \textbf{exemplo-Enamex} para o 1º capítulo do relatório. Um exemplo em formato \textit{TXT} não anexado com o enunciado é usado no processamento de tags personalizadas e resumidas para gerar marcas conhecidas de \textbf{HTML} para criar um documento ...
+Dos exemplos juntos em anexo com o enunciado do trabalho prático, fazemos uso do ficheiro em formato \textit{XML} \textbf{exemplo-Enamex} para demonstração no 1º capítulo do relatório.
+\\
+Para o 2º capítulo explica-se como um pré-processador HTML é desenvolvido. Um exemplo em formato \textit{TXT} não anexado com o enunciado é usado no processamento de tags personalizadas e resumidas para gerar marcas conhecidas de \textbf{HTML} que criam um documento para facilitar a edição desse mesmo.
 
 \raggedbottom
 \pagebreak
@@ -38,18 +40,76 @@ Dos exemplos juntos em anexo com o enunciado do trabalho prático, fazemos uso d
 \chapter{Enamex}
 \section{Nomes}
 
-A funcionalidade básica deste trabalho está em identificar padrões da linguagem \textit{Enamex} para processar palavras-chave, assim como nomes completos de pessoas, locais e cidades.
+A funcionalidade básica desta parte do trabalho está em identificar padrões da linguagem \textit{Enamex} para processamento de palavras-chave, assim como nomes completos de pessoas, locais e cidades.
 
 Depois de processado, é então gerada uma página HTML com toda a informação extraída do exemplo \textit{Enamex}, filtrando a informação que nos é pedida.
 ~\\
-Como no exemplo em anexo junto com o trabalho prático, existem diversos caractéres especiais vindos do tipo de linguagem \textit{XML}, portanto primeiro temos de fazer o processamento dos mesmos.
+Como no exemplo em anexo junto com o trabalho prático, existem diversos caractéres especiais vindos do tipo de linguagem \textit{XML}, que geralmente começam sempre com o tag \textbf{<ENAMEX>}. Para conseguirmos finalizar essa parte do codigo temos de usar a mesma tag com uma barra antes da palavra \textbf{/ENAMEX}. Portanto primeiro temos de fazer o processamento dos mesmos.
+\\
+Para fazer a leitura de todos os nomes no documento Enamex, temos que fazer parsing das linhas que contenham as tags \textbf{ENAMEX TYPE}, \textbf{PERSON} e \textbf{NAME}. De seguida temos de procurar os nomes dentro das tags, fazendo um grupo de captura de todos os nomes que contenham caractéres específicos como se mostra no código extraído do trabalho.
+\begin{verbatim}
+92  PERSON      [<]ENAMEX[ ]TYPE[=]["]PERSON["][>]
+93  NAME        [<]ENAMEX[ ]TYPE[=]["]NAME["][>]
+94  PROCNOME    ([.]?[ ]?[\-\.ãa-zA-Z]+[.]?[ ]?)+ 
+ . . .
+97  {PERSON}{PROCNOME}[<]     {yytext[yyleng-1]='\0'; addNome(&yytext[22]);}
+98  {PERSON}[ ]{PROCNOME}[<]     {yytext[yyleng-1]='\0'; addNome(&yytext[23]);}
+99  {NAME}{PROCNOME}[<]       {yytext[yyleng-1]='\0'; addNome(&yytext[20]);}
+100 {NAME}[ ]{PROCNOME}[<]       {yytext[yyleng-1]='\0'; addNome(&yytext[21]);}
+\end{verbatim}
 
+Todos os nomes reconhecidos irão então ser passados como argumento para uma função em C \emph{addNome()}, que guardará todo o processamento para um array de strings.
+
+\pagebreak
+\section{Ordenação}
+Outro objetivo indicado nas alíneas do enunciado seria ordenar todos os nomes por ordem alfabética. Depois de processar todos os nomes do exemplo e antes de criarmos o documento HTML, temos a função em C \emph{ordenar()}.
+
+A função, para além do algoritmo normal de sort de strings através de dois ciclos \emph{for}, elimina também nomes completos que estão repetidos no nosso array de nomes. A desvantagem deste processo escolhido é que, ao verificar os nomes repetidos, também iremos percorrer duas vezes o array com mais dois ciclos \emph{for}.
+
+Primeiro, a função verifica o array, usando dois contadores:
+\begin{verbatim}
+71  while (nome[i]!=NULL && i<50) {count++;i++;}
+\end{verbatim}
+
+\begin{verbatim}
+72  for (i=0;i<count;i++){
+73             for (j=i;j<count;j++){
+74                if (strcmp(nome[i],nome[j])>0){
+75                    strcpy (temp,nome[i]);
+76                    strcpy (nome[i],nome[j]);
+77                    strcpy (nome[j],temp);
+78                }
+79             }
+80          }
+\end{verbatim}
+
+\begin{verbatim}
+81  for (i=0;i<count;i++){
+82             for (j=i;j<count;j++){
+83                if (strcmp(nome[i],nome[j])==0){
+84                    strcpy (temp,nome[i]);
+85                }
+86             }
+87          }
+\end{verbatim}
 
 
 \pagebreak
 \section{Países e cidades}
-\pagebreak
-\section{Ordenação}
+Também temos de fazer a leitura de todos os países e cidades no nosso ficheiro exemplo. O processo é parecido com o processamento de nomes. Usámos o mesmo grupo de captura para processar os nomes que estão dentro de \emph{tags}. A diferença está em procurarmos as etiquetas \textbf{COUNTRY} e \textbf{CITY} em vez das tags \textbf{PERSON} e \textbf{NAME}.
+
+\begin{verbatim}
+71  CITY      [<]ENAMEX[ ]TYPE[=]["]CITY["][>]
+72  COUNTRY        [<]ENAMEX[ ]TYPE[=]["]COUNTRY["][>]
+73  PROC   ([a-zA-Z\-\.ãõâáóéçD\.\n][ ]?)*
+. . .
+
+76  {CITY}{PROC}[<]     {yytext[yyleng-1]='\0'; addCidade(&yytext[20]);}
+77  {COUNTRY}[ ]{PROC}[<]     {yytext[yyleng-1]='\0'; addPais(&yytext[23]);}
+\end{verbatim}
+
+Na parte em linguagem C deste ficheiro Lex, teremos dois arrays de strings que irão servir para armazenar países e cidades então processadas pelas linhas acima referidas.
+
 
 
 \raggedbottom
