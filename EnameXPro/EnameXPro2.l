@@ -69,13 +69,13 @@
 %}
 
 CITY      [<]ENAMEX[ ]TYPE[=]["]CITY["][>]
-COUNTRY        [<]ENAMEX[ ]TYPE[=]["]COUNTRY["][>]
-PROC   ([a-zA-Z\-\.ãõâáóéçD\.\n][ ]?)*
+COUNTRY   [<]ENAMEX[ ]TYPE[=]["]COUNTRY["][>]
+PROC      ([a-zA-Z\-\.ãõâáóéçD\.\n][ ]?)*
 %%
 
-{CITY}{PROC}[<]     {yytext[yyleng-1]='\0'; addCidade(&yytext[20]);}
+{CITY}{PROC}[<]           {yytext[yyleng-1]='\0'; addCidade(&yytext[20]);}
 {COUNTRY}[ ]{PROC}[<]     {yytext[yyleng-1]='\0'; addPais(&yytext[23]);}
-.       ;
+.                         ;
 %%
 
 int yywrap(void) {return 1;}
